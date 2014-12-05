@@ -1,0 +1,15 @@
+---
+# tasks file for nodejs
+- name: add key for nodejs repository
+  apt_key: >
+    url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    id=68576280
+    state=present
+
+- name: add nodejs repository
+  apt_repository: >
+    repo='deb https://deb.nodesource.com/node {{ansible_distribution_release}} main' 
+    state=present
+
+- name: install nodejs
+  apt: pkg=nodejs state=present

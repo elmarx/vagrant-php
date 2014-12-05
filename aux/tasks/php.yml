@@ -1,0 +1,34 @@
+# vim: set filetype=ansible :
+---
+- name: install php development packages
+  apt: >
+    pkg={{item}}
+  with_items:
+  - php-apc
+  - phpunit
+  - php5-cli
+  - php5-curl
+  - php5-xdebug
+
+- name: configure xdebug
+  lineinfile: >
+    dest=/etc/php5/conf.d/20-xdebug.ini
+    state=present
+    line={{item}}
+  with_items:
+    - 'xdebug.remote_enabe=On'
+    - 'xdebug.idekey=PHPSTORM'
+    - 'xdebug.remote_host={{ansible_default_ipv4.gateway}}'
+    - 'xdebug.max_nesting_level=1000'
+  notify: restart apache2
+
+- name: setup error handling in php.ini
+  lineinfile: >
+    dest=/etc/php5/apache2/php.ini
+    line={{item.line}}
+    regexp={{item.regexp}}
+  with_items:
+    - {line: "'display_errors = On'", regexp: "'^display_errors ='"}
+    - {line: "'error_reporting = E_ALL'", regexp: "'^error_reporting = '"}
+  notify: restart apache2
+

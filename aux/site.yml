@@ -1,0 +1,29 @@
+# vim: set filetype=ansible :
+---
+- hosts: all
+  sudo: True
+  vars:
+    - mysql_root_password: uiaeuiae
+  tasks:
+    - name: Install basic packages
+      apt: >
+        pkg={{item}}
+        update_cache=yes 
+        cache_valid_time=3600
+      with_items:
+        - git
+        - mutt
+        - vim-nox
+        - python-apt # required for apt_repository module
+        - apt-transport-https
+
+    - name: setup editor
+      alternatives: name=editor path=/usr/bin/vim
+
+    - include: tasks/php.yml
+    - include: tasks/apache.yml
+    - include: tasks/mysql.yml
+    - include: tasks/nodejs.yml
+
+  handlers:
+    - include: handlers/main.yml
