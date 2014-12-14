@@ -16,7 +16,7 @@
     state=present
     line={{item}}
   with_items:
-    - 'xdebug.remote_enabe=On'
+    - 'xdebug.remote_enable=On'
     - 'xdebug.idekey=PHPSTORM'
     - 'xdebug.remote_host={{ansible_default_ipv4.gateway}}'
     - 'xdebug.max_nesting_level=1000'
